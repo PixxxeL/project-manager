@@ -8,9 +8,9 @@ set py_pro_st=/D/python/pro
 set php_pro=D:\www\htdocs
 set php_pro_st=/D/www/htdocs
 set repo_user=pixxxel
+
 for /f "delims=" %%i in (%app_path%.pwd) do if not defined repo_pwd set repo_pwd=%%i 
 set repo_acc=%repo_user%:%repo_pwd%
-
 set api_url=https://api.bitbucket.org/2.0/repositories/%repo_user%/
 set git_url=git@bitbucket.org:%repo_user%/
 set client=https://raw.githubusercontent.com/PixxxeL/regular-gulpfile/master/new-client.bat
@@ -32,8 +32,8 @@ if /I "%1" == "py" (
 ) else if /I "%1" == "php" (
     goto PHP
 ) else (
-    echo \033[91m You must define type of project as `python` of `php`. For example: | %colorize%
-    echo \033[91m new-project.bat py proj-example | %colorize%
+    echo \033[91m You must define type of project as `python` or `php`. For example: | %colorize%
+    echo \033[91m new-project.bat py proj-name | %colorize%
     goto EOF
 )
 
