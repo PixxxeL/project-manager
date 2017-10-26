@@ -88,15 +88,15 @@ if /I "%1" == "py" (
     curl -X POST -u %repo_acc% -H "Content-Type: application/json" -d @%bb_data% %api_url%%pro_name%
     mkdir %pro_path%\repo && cd %pro_path%\repo && git init
     git remote add origin %git_url%%pro_name%.git
-    echo /client/bower_components > %pro_path%\repo\.gitignore
-    echo /client/node_modules >> %pro_path%\repo\.gitignore
-    echo /client/html >> %pro_path%\repo\.gitignore
-    echo *.pyc >> %pro_path%\repo\.gitignore
-    echo *.sql >> %pro_path%\repo\.gitignore
-    echo *.log >> %pro_path%\repo\.gitignore
-    echo *.sqlite3 >> %pro_path%\repo\.gitignore
-    echo *.db >> %pro_path%\repo\.gitignore
-    echo local_settings.py >> %pro_path%\repo\.gitignore
+    echo /client/bower_components> %pro_path%\repo\.gitignore
+    echo /client/node_modules>> %pro_path%\repo\.gitignore
+    echo /client/html>> %pro_path%\repo\.gitignore
+    echo *.pyc>> %pro_path%\repo\.gitignore
+    echo *.sql>> %pro_path%\repo\.gitignore
+    echo *.log>> %pro_path%\repo\.gitignore
+    echo *.sqlite3>> %pro_path%\repo\.gitignore
+    echo *.db>> %pro_path%\repo\.gitignore
+    echo local_settings.py>> %pro_path%\repo\.gitignore
     echo # %pro_name% > %pro_path%\repo\readme.md
     git add .gitignore readme.md
     git commit -m "Init commit"
