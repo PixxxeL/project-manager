@@ -2,11 +2,11 @@
 
 ::chcp 1251
 
-set app_path=D:\storage\new-project\
-set py_pro=D:\python\pro
-set py_pro_st=/D/python/pro
-set php_pro=D:\www\htdocs
-set php_pro_st=/D/www/htdocs
+set app_path=C:\Users\pix\dev\pro\new-project\repo\legacy\
+set py_pro=C:\Users\pix\dev\pro
+set py_pro_st=/C/Users/pix/dev/pro
+set php_pro=C:\Users\pix\dev\pro
+set php_pro_st=/C/Users/pix/dev/pro
 set repo_user=pixxxel
 
 for /f "delims=" %%i in (%app_path%.pwd) do if not defined repo_pwd set repo_pwd=%%i 
