@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+from distutils.dir_util import copy_tree
 import json
 import os
 import subprocess
@@ -28,7 +29,7 @@ class Generator(object):
         self.add_readme()
         self.add_gitignore()
         self.commit('Init commit')
-        #
+        self.route_type()
         self.push()
 
     def make_project_dir(self):
@@ -131,3 +132,73 @@ class Generator(object):
         self.tmpl_dir = os.path.join(self.app_dir, 'templates')
         self.pro_dir = os.path.join(self.model['path'], self.model['name'])
         self.repo_dir = os.path.join(self.pro_dir, 'repo')
+
+    def dev_generate(self):
+        self.route_type()
+
+    def route_type(self):
+        print _(u'Копирование файлов проекта...')
+        meth = getattr(self, PROJECT_TYPES[self.model['type']]['method'], None)
+        if meth:
+            meth()
+        else:
+            print _(u'\nОшибка!\nНет метода для этого типа...')
+
+    def static_type(self):
+        src = os.path.join(self.tmpl_dir, 'static')
+        dst = os.path.join(self.repo_dir, 'client')
+        copy_tree(src, dst)
+        os.chdir(dst)
+        self.npm_init()
+        self.bower_init()
+        self.call('npm i --save %s' % ' '.join(STATIC_NPM_PACKS))
+        self.call('bower i --save %s' % ' '.join(STATIC_BOWER_PACKS))
+        self.call('gulp copy')
+        self.call('gulp compile')
+        os.chdir(self.pro_dir)
+
+    def npm_init(self):
+        data = {
+            'name': self.model['name'],
+            'version': '1.0.0',
+            'description': '',
+            'main': 'gulpfile.js',
+            'scripts': {},
+            'author': self.model['user'],
+            'homepage': 'https://bitbucket.org/%(user)s/%(name)s' % self.model,
+            'repository': {
+                'type': 'git',
+                'url': 'git+ssh://git@bitbucket.org/%(user)s/%(name)s.git' % self.model,
+            },
+            'license': 'ISC',
+            'dependencies': {}
+        }
+        json.dump(
+            data,
+            open(os.path.join(self.repo_dir, 'client', 'package.json'), 'wb')
+        )
+
+    def bower_init(self):
+        data = {
+            'name': self.model['name'],
+            'description': '',
+            'main': 'gulpfile.js',
+            'authors': [
+                self.model['user']
+            ],
+            'license': 'ISC',
+            'homepage': 'https://bitbucket.org/%(user)s/%(name)s' % self.model,
+            'private': True,
+            'ignore': [
+                '**/.*',
+                'node_modules',
+                'bower_components',
+                'test',
+                'tests'
+            ],
+            'dependencies': {}
+        }
+        json.dump(
+            data,
+            open(os.path.join(self.repo_dir, 'client', 'bower.json'), 'wb')
+        )

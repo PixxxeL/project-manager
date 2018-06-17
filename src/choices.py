@@ -4,6 +4,7 @@ PROJECT_TYPES = {
     1 : {
         'title' : u'Статический полностью',
         'language' : 'html/css',
+        'method' : 'static_type',
     },
     #2 : {
     #    'title' : u'Статический с PHP',
@@ -47,3 +48,14 @@ PROJECT_IDES = {
         'title' : u'Проект в Sublime Text 3',
     },
 }
+
+STATIC_NPM_PACKS = [
+    'gulp', 'gutil', 'del', 'gulp-sass', 'gulp-jade', 'gulp-coffee',
+    'gulp-shell', 'gulp-rename', 'gulp-sourcemaps', 'gulp-yuicompressor',
+    'gulp-concat', 'gulp-zip', 'gulp-html-replace'
+]
+
+STATIC_BOWER_PACKS = [
+    'jquery-legacy=jquery#1.12.4', 'jquery-modern=jquery#2.2.4',
+    'font-awesome#4.7.0', 'html5-boilerplate', 'html5shiv', 'respond'
+]

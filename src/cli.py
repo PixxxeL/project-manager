@@ -104,9 +104,9 @@ class Cli(object):
             text = u'%s  %d) %s\n' % (text, k, v['title'],)
         return text
 
-    def test_run(self):
+    def dev_run(self):
         self.get_repo_password()
-        Generator(self.model).generate()
+        Generator(self.model).dev_generate()
 
 
 def _new_model():
