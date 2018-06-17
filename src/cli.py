@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 
-#import os
+import getpass
 import re
-import sys
 
 from choices import *
 from generator import Generator
+from encoder import _
 
 
 class Cli(object):
@@ -53,9 +53,34 @@ class Cli(object):
 
     def get_project_repo(self):
         self.model['repo'] = self.ask_choices(
-            u'\nВнешний репозиторий:',
+            u'\nУдаленный репозиторий:',
             PROJECT_REPOS
         )
+        self.get_repo_user()
+        self.get_repo_password()
+
+    def get_repo_user(self):
+        if not self.model['repo']:
+            return
+        ask = _(u'\nЛогин на удаленном репозитории: ')
+        inp = None
+        while not inp:
+            inp = raw_input(ask)
+            inp = _(inp.strip())
+        self.model['user'] = inp
+
+    def get_repo_password(self):
+        if not self.model['repo']:
+            return
+        ask = _(u'\nПароль на удаленном репозитории: ')
+        inp = None
+        while not inp:
+            #print ask
+            #inp = getpass.getpass('')
+            #win_getpass
+            inp = getpass.getpass(ask)
+            inp = _(inp.strip())
+        self.model['password'] = inp
 
     def get_project_ide(self):
         self.model['ide'] = self.ask_choices(
@@ -79,39 +104,19 @@ class Cli(object):
             text = u'%s  %d) %s\n' % (text, k, v['title'],)
         return text
 
-
-class StringEncoder(object):
-
-    def __init__(self):
-        self.coding = sys.stdout.encoding
-        #if os.name == 'posix':
-        #    self.coding = 'utf-8'
-        #else:
-        #    self.coding = 'cp866'
-
-    def encode(self, string):
-        return string.encode(self.coding)
-
-    def decode(self, string):
-        return string.decode(self.coding)
-
-
-_encoder = StringEncoder()
-
-
-def _(string):
-    if isinstance(string, unicode):
-        return _encoder.encode(string)
-    else:
-        return _encoder.decode(string)
+    def test_run(self):
+        self.get_repo_password()
+        Generator(self.model).generate()
 
 
 def _new_model():
     return {
-        'path' : '.',
-        'name' : '',
-        'title' : '',
-        'type' : 0,
+        'path' : 'C:\\Users\\pix\\dev\\pro',
+        'name' : 'some-test-project',
+        'title' : u'Тестовый проект',
+        'type' : 1,
         'repo' : 0,
         'ide' : 0,
+        'user' : 'pixxxel',
+        'password' : '',
     }

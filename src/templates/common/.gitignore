@@ -1,0 +1,10 @@
+/client/bower_components
+/client/node_modules
+*.pyc
+*.pyo
+*.log
+*.sql
+*.sqlite3
+*.db
+local_settings.py
+/client/config.json
