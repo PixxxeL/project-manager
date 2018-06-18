@@ -114,7 +114,7 @@ def _new_model():
         'path' : 'C:\\Users\\pix\\dev\\pro',
         'name' : 'some-test-project',
         'title' : u'Тестовый проект',
-        'type' : 1,
+        'type' : 2,
         'repo' : 0,
         'ide' : 0,
         'user' : 'pixxxel',

@@ -3,6 +3,7 @@
 from distutils.dir_util import copy_tree
 import json
 import os
+import re
 import subprocess
 import shutil
 import sys
@@ -133,9 +134,6 @@ class Generator(object):
         self.pro_dir = os.path.join(self.model['path'], self.model['name'])
         self.repo_dir = os.path.join(self.pro_dir, 'repo')
 
-    def dev_generate(self):
-        self.route_type()
-
     def route_type(self):
         print _(u'Копирование файлов проекта...')
         meth = getattr(self, PROJECT_TYPES[self.model['type']]['method'], None)
@@ -162,8 +160,19 @@ class Generator(object):
         dst = os.path.join(self.repo_dir, 'client')
         os.chdir(dst)
         self.call('git clone git@bitbucket.org:megatyumen-team/microfw.git scripts')
-        shutil.rmtree(os.path.join(dst, 'scripts', '.git'), ignore_errors=True)
-        self.call('rm sccripts/.git')
+        scripts = os.path.join(dst, 'scripts')
+        shutil.rmtree(os.path.join(scripts, '.git'), ignore_errors=True)
+        os.remove(os.path.join(scripts, '.gitignore'))
+        os.remove(os.path.join(scripts, 'README.md'))
+        self.find_and_replace(
+            os.path.join(dst, 'gulpfile.js'),
+            re.compile(r'IS_PHP *= *false'),
+            'IS_PHP = true'
+        )
+        os.rename(
+            os.path.join(scripts, 'conf.template.php'),
+            os.path.join(scripts, 'conf.php')
+        )
         os.chdir(self.pro_dir)
 
     def npm_init(self):
@@ -221,3 +230,11 @@ class Generator(object):
         if self.model['repo'] == 1:
             return 'git+ssh://git@bitbucket.org/%(user)s/%(name)s.git' % self.model
         return ''
+
+    def find_and_replace(self, filepath, target_re, string):
+        data = open(filepath, 'rb').read()
+        data = target_re.sub(string, data)
+        open(filepath, 'wb').write(data)
+
+    def dev_generate(self):
+        self.route_type()

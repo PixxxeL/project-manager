@@ -1,15 +1,46 @@
 # Console Project Manager
 
-Консольное приложение создает проект для разработки и репозиторий.
+Консольное приложение. Создает локальный проект для разработки
+и репозиторий проекта.
 
-## Статический проект
+## Загрузить
 
-## Статический проект с минимальными возможностями на PHP
+[Бинарники](https://github.com/PixxxeL/new-project/releases)
 
-## Сайт на Joomla
+## Типы проектов
 
-## Чистый Django 1.11
+### Статический проект
 
-## Django 1.11 и Grappelli
+Полностью статический проект. Только HTML, CSS, Javascript.
+Для упрощения работы с кодом используется
+[Jade](http://jade-lang.com/) вместо HTML,
+[SASS](http://sass-lang.com/) вместо CSS
+и [CoffeeScript](http://coffeescript.org/) вместо Javascript.
 
-## Сайт на Mezzanine
+Для работы проекта нужны:
+
+* [Python](https://www.python.org/downloads/) или [PHP](http://php.net/downloads.php) для локального сервера
+* [Node](https://nodejs.org/en/download/) с [NPM](https://docs.npmjs.com/getting-started/what-is-npm)
+* [Gulp](http://gulpjs.com/)
+* [Bower](https://bower.io/)
+
+### Статический проект с минимальными возможностями на PHP
+
+Статический проект, но с минимальными серверными возможностями,
+реализованными на PHP, в частности, с отправкой писем.
+
+### Сайт на Joomla
+
+в разработке...
+
+### Чистый Django 1.11
+
+в разработке...
+
+### Django 1.11 и Grappelli
+
+в разработке...
+
+### Сайт на Mezzanine
+
+в разработке...

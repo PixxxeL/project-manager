@@ -8,3 +8,4 @@
 *.db
 local_settings.py
 /client/config.json
+conf.php
