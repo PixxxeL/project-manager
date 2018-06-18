@@ -1,0 +1,129 @@
+.mm-popup
+    display: none
+
+.mm-popup--visible
+    display: block
+    .mm-popup__overlay
+        position: fixed
+        top: 0
+        left: 0
+        width: 100%
+        height: 100%
+        z-index: 1000
+        overflow: auto
+        background: rgba(0, 0, 0, .1)
+    .mm-popup__close
+        position: absolute
+        top: 10px
+        right: 20px
+        padding: 0
+        width: 20px
+        height: 20px
+        cursor: pointer
+        outline: none
+        text-align: center
+        border-radius: 10px
+        border: none
+        text-indent: -9999px
+        background: transparent url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAYAAACM/rhtAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA39pVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQyIDc5LjE2MDkyNCwgMjAxNy8wNy8xMy0wMTowNjozOSAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDpkMGQ4MmFjMS1mZTI2LTEyNGYtYjRiMy1iNTE5NDFlMTA2NDgiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NEVENjJERTFGNTBFMTFFNzlGRTg4RTkxM0U1OUVBRTQiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NEVENjJERTBGNTBFMTFFNzlGRTg4RTkxM0U1OUVBRTQiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIChXaW5kb3dzKSI+IDx4bXBNTTpEZXJpdmVkRnJvbSBzdFJlZjppbnN0YW5jZUlEPSJ4bXAuaWlkOjJjMDU1MDRjLWI0MmQtZTg0Ni1hYjRhLWI3OGQ2N2E0YmQ1ZiIgc3RSZWY6ZG9jdW1lbnRJRD0iYWRvYmU6ZG9jaWQ6cGhvdG9zaG9wOmZhM2FiYTQzLWFhYzEtOTE0Yy1iYzMwLTIzMDM3NjU0MDgxYiIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pji2fFkAAAPRSURBVHjaxJhpSFRRGIZnbCxzy0gzFSu0rKTVH9GCYGhUf7QF28wsI0hakMofQQT1Jww1siLJgqgojTaXimiBpAiDLFKUkLCmEkkjLQs1p+k99F64DJOec+84HnjEuffcc96zfef7PqvT6bSYKAlgHogAkUSUj8BO6kCz0Q6sBgQmg1UgFUTzWRdoJVY+F/jxfQO4QeqVehMCJUkCtc5/pRWUgBUgYIBvxoN14Bro5rcVYJpsvzKVYsBdNv6KoqwKA9PwA1vBJ/AbnARjzQpMAV+BHWQYFOaKPzjEGX0LphgVmAv6wWMwzgPCXJkO3oEOkKgqMI9LKpbBNgTiNELBU9ALlssKTAMOUDiEwvSMAg/ANxA7mMC53BuVwMdLAi3cQi3gjatV0FcSgupAAwj0ojj95PwC5/8ncAv3XdIwiNPYx+01w1WgP+3T7WEUJxjNS6DcVeAumpQ4iUaiQKqBziMkLYLQ8gfM0gt8Ah5KdrSBW2G/gjgxoB6QKVF3JG3jMU3gBK77DoUOj1PkTom66aAPVNOkyLR/BdRrAnMoMFxxyUq4FNsGqJPJrXMd+Cq0vZkTECV+lGpqFRH38gUOLsPN++18dxmMUGw7nAKzxI/7oMrgqRMdl3GW1uie7+HsnjNh8MXNctAGl3ASeGTQ4XWATXRMr4LVIB7kg9Ngt3A5DbbdAUJt9HztJtz+frAWVIBbQLRZAPIs5ko7CPPBnz7ga7Ix0UYjxQnBVRbz5QcI8tGUmmhIxCDFYC84DGrBHbDApEARiLWJzfiMdsfIRhYH4CxPXC6fBYMX3OQJJq69LnFIxD83QY3BE3yJp9XVyItY4zVvhJkG2h7DQWdaeGX1KrpYvozUHPSC3NUJA42gTSWKI8kUON9C18ZJT1rWA65kZLZewkFopqcUoyDwDL+xag9auJdkPj7FGV8pWT8avCdBkvtazHqx3pspAp0ycSpYBBYqLpmYvYsgRKLuMq5ool5gJN3to8PssIr7/SVDD6ury18AfhrwajxJFmdvibuYRMSo33k6h0NcCA9GxUBh50aOIM/L4mz06DtdY2N3lYvoPqV4UWAJzdZSmcyCjfmYboPBkepVmc9Vy1HJzQTSiXXo7lhPE8w+xFV5wEh2S9y1Jzi6MhpcT4lbDJp4KFPNJjCzQTvt5JFBMqqDEc9T6mQeJt4TGVbNBBTyiuuiF5MmGUZG0tu5x8Nnp4MhFauoJtFjQTZIB1NBN2gCHxg2fAYBuqz/ZDCbcclzUA5KQc9QZvm1MoeZ/jgGXhNBFEVrGX8huAZUgy9GOvkrwADvftW5sp0+HAAAAABJRU5ErkJggg==') no-repeat center center
+        background-size: 100%
+        margin: 0
+    .mm-popup__input
+        display: block
+        width: 100%
+        height: 30px
+        border-radius: 3px
+        background: #f5f5f5
+        border: 1px solid #e9ebec
+        outline: none
+        -moz-box-sizing: border-box !important
+        -webkit-box-sizing: border-box !important
+        box-sizing: border-box !important
+        font-size: 14px
+        padding: 0 12px
+        color: #808080
+    .mm-popup__btn
+        border-radius: 3px
+        -moz-box-sizing: border-box
+        -webkit-box-sizing: border-box
+        box-sizing: border-box
+        padding: 0 10px
+        margin: 0
+        line-height: 32px
+        height: 32px
+        border: 1px solid #666
+        text-align: center
+        display: inline-block
+        font-size: 12px
+        font-weight: 400
+        color: #333
+        background: transparent
+        outline: none
+        text-decoration: none
+        cursor: pointer
+    .mm-popup__btn--success
+        background-color: #27ae60
+        border-color: #27ae60
+        color: #fff
+    .mm-popup__btn--danger
+        background-color: #c5545c
+        border-color: #c5545c
+        color: #fff
+    .mm-popup__box
+        width: 450px
+        position: fixed
+        top: 10%
+        left: 50%
+        margin-left: -175px
+        background: #fff
+        box-shadow: 0px 5px 20px 0px rgba(126,137,140,0.20)
+        border-radius: 5px
+        border: 1px solid #B8C8CC
+        overflow: hidden
+        z-index: 1001
+        text-align: left
+        .mm-popup__box__header
+            padding: 10px 20px
+            background: #666
+            .mm-popup__box__header__title
+                margin: 0
+                font-size: 18px
+                text-transform: none
+                color: #fff
+        .mm-popup__box__body
+            padding: 20px
+            line-height: 1.4
+            font-size: 14px
+            color: #454B4D
+            background: #fff
+            position: relative
+            z-index: 2
+            .mm-popup__box__body p
+                margin: 0 0 5px
+        .mm-popup__box__footer
+            display: none
+    .mm-popup__box--popover
+        width: 300px
+        margin-left: -150px
+        .mm-popup__box--popover .mm-popup__box__body
+            padding: 20px
+
+@media screen and (max-width: 450px)
+    .mm-popup--visible
+        .mm-popup__box
+            width: auto
+            left: 10px
+            right: 10px
+            top: 10px
+            margin-left: 0
+            .mm-popup__box__footer__left-space
+                float: none
+            .mm-popup__box__footer__right-space
+                float: none
+            .mm-popup__box__footer
+                padding-top: 30px
+            .mm-popup__box__footer .mm-popup__btn
+                display: block
+                width: 100%
+                text-align: center
+                margin-top: 10px

@@ -50,6 +50,11 @@ class Cli(object):
             u'\nТип проекта:',
             PROJECT_TYPES
         )
+        if self.model['type'] in [4]:
+            self.model['client_type'] = self.ask_choices(
+                u'\nТип клиентской части проекта:',
+                PROJECT_CLIENT_TYPES
+            )
 
     def get_project_repo(self):
         self.model['repo'] = self.ask_choices(
@@ -75,10 +80,9 @@ class Cli(object):
         ask = _(u'\nПароль на удаленном репозитории: ')
         inp = None
         while not inp:
-            #print ask
-            #inp = getpass.getpass('')
-            #win_getpass
-            inp = getpass.getpass(ask)
+            print ask,
+            inp = getpass.getpass('')
+            #inp = getpass.getpass(ask)
             inp = _(inp.strip())
         self.model['password'] = inp
 
@@ -105,6 +109,7 @@ class Cli(object):
         return text
 
     def dev_run(self):
+        self.get_project_type()
         self.get_repo_password()
         Generator(self.model).dev_generate()
 
@@ -112,11 +117,12 @@ class Cli(object):
 def _new_model():
     return {
         'path' : 'C:\\Users\\pix\\dev\\pro',
-        'name' : 'some-test-project',
+        'name' : 'test-django-project',
         'title' : u'Тестовый проект',
-        'type' : 2,
+        'type' : 4,
         'repo' : 0,
         'ide' : 0,
         'user' : 'pixxxel',
         'password' : '',
+        'client_type' : 0,
     }

@@ -27,10 +27,12 @@ class Generator(object):
         self.make_project_dir()
         self.create_repo()
         self.create_ide_pro()
+        self.add_docs_info()
         self.add_readme()
         self.add_gitignore()
         self.commit('Init commit')
         self.route_type()
+        self.commit('Base code')
         self.push()
 
     def make_project_dir(self):
@@ -105,12 +107,35 @@ class Generator(object):
 
     def add_readme(self):
         path = os.path.join(self.repo_dir, 'readme.md')
-        open(path, 'wb').write((u'# %s' % self.model['title']).encode('utf-8'))
+        text = (u'# %s' % self.model['title'])
+        for f in PROJECT_TYPES[self.model['type']]['readmes']:
+            filepath = os.path.join(self.tmpl_dir, 'readmes', '%s.md' % f)
+            text = u'%s\n\n%s' % (text, open(filepath, 'rb').read().decode('utf-8'),)
+        open(path, 'wb').write(text.encode('utf-8'))
 
     def add_gitignore(self):
         src = os.path.join(self.tmpl_dir, 'common', '.gitignore')
         dst = os.path.join(self.repo_dir, '.gitignore')
         shutil.copy(src, dst)
+
+    def add_docs_info(self):
+        docs = os.path.join(self.pro_dir, 'docs')
+        if not os.path.exists(docs):
+            os.makedirs(docs)
+        open(os.path.join(docs, 'info.txt'), 'wb')
+
+    def add_batches(self, names=[]):
+        if os.name != 'nt': # temporary!
+            return # temporary!
+        ext = 'bat' if os.name == 'nt' else 'sh'
+        for name in names:
+            src = os.path.join(
+                self.tmpl_dir, 'batches', '%s.%s' % (name, ext,)
+            )
+            dst = os.path.join(
+                self.pro_dir, '%s.%s' % (name, ext,)
+            )
+            shutil.copy(src, dst)
 
     def commit(self, message):
         os.chdir(self.repo_dir)
@@ -142,18 +167,22 @@ class Generator(object):
         else:
             print _(u'\nОшибка!\nНет метода для этого типа...')
 
-    def static_type(self):
-        src = os.path.join(self.tmpl_dir, 'static')
+    def static_type(self, mode='static'):
+        src = os.path.join(self.tmpl_dir, mode)
         dst = os.path.join(self.repo_dir, 'client')
         copy_tree(src, dst)
         os.chdir(dst)
         self.npm_init()
         self.bower_init()
-        self.call('npm i --save %s' % ' '.join(STATIC_NPM_PACKS))
-        self.call('bower i --save %s' % ' '.join(STATIC_BOWER_PACKS))
+        npm = REACT_NPM_PACKS if mode == 'react' else STATIC_NPM_PACKS
+        bower = REACT_BOWER_PACKS if mode == 'react' else STATIC_BOWER_PACKS
+        self.call('npm i --save %s' % ' '.join(npm))
+        self.call('bower i --save %s' % ' '.join(bower))
         self.call('gulp copy')
-        self.call('gulp compile')
+        self.call('gulp build') if mode == 'react' else self.call('gulp compile')
         os.chdir(self.pro_dir)
+        batched = ['gulp', 'webpack'] if mode == 'react' else ['gulp']
+        self.add_batches(batched)
 
     def static_with_php_type(self):
         self.static_type()
@@ -174,6 +203,20 @@ class Generator(object):
             os.path.join(scripts, 'conf.php')
         )
         os.chdir(self.pro_dir)
+
+    def pure_django_type(self):
+        os.chdir(self.pro_dir)
+        os.mkdir('media', self.dir_mode)
+        src = os.path.join(self.tmpl_dir, 'django')
+        dst = os.path.join(self.repo_dir, 'server')
+        copy_tree(src, dst)
+        self.call('virtualenv env')
+        os.chdir(dst)
+        self.call('pip install -r requirements.txt')
+        os.chdir(self.pro_dir)
+        self.add_batches(['envi', 'mana', 'runs'])
+        client_type = 'react' if self.model['client_type'] == 1 else 'static'
+        self.static_type(client_type)
 
     def npm_init(self):
         data = {
