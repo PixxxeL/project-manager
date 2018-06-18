@@ -157,6 +157,15 @@ class Generator(object):
         self.call('gulp compile')
         os.chdir(self.pro_dir)
 
+    def static_with_php_type(self):
+        self.static_type()
+        dst = os.path.join(self.repo_dir, 'client')
+        os.chdir(dst)
+        self.call('git clone git@bitbucket.org:megatyumen-team/microfw.git scripts')
+        shutil.rmtree(os.path.join(dst, 'scripts', '.git'), ignore_errors=True)
+        self.call('rm sccripts/.git')
+        os.chdir(self.pro_dir)
+
     def npm_init(self):
         data = {
             'name': self.model['name'],
@@ -165,10 +174,10 @@ class Generator(object):
             'main': 'gulpfile.js',
             'scripts': {},
             'author': self.model['user'],
-            'homepage': 'https://bitbucket.org/%(user)s/%(name)s' % self.model,
+            'homepage': self.repo_site_url(),
             'repository': {
                 'type': 'git',
-                'url': 'git+ssh://git@bitbucket.org/%(user)s/%(name)s.git' % self.model,
+                'url': self.repo_git_url(),
             },
             'license': 'ISC',
             'dependencies': {}
@@ -187,7 +196,7 @@ class Generator(object):
                 self.model['user']
             ],
             'license': 'ISC',
-            'homepage': 'https://bitbucket.org/%(user)s/%(name)s' % self.model,
+            'homepage': self.repo_site_url(),
             'private': True,
             'ignore': [
                 '**/.*',
@@ -202,3 +211,13 @@ class Generator(object):
             data,
             open(os.path.join(self.repo_dir, 'client', 'bower.json'), 'wb')
         )
+
+    def repo_site_url(self):
+        if self.model['repo'] == 1:
+            return 'https://bitbucket.org/%(user)s/%(name)s' % self.model
+        return ''
+
+    def repo_git_url(self):
+        if self.model['repo'] == 1:
+            return 'git+ssh://git@bitbucket.org/%(user)s/%(name)s.git' % self.model
+        return ''

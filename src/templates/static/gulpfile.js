@@ -25,7 +25,7 @@ var paths = {
     'sass'   : './sass/**/*.sass',
     'jade'   : './jade/**/*.jade',
     'coffee' : './coffee/**/*.coffee',
-    'build'  : 'build' // I'm using ../../build
+    'build'  : '../../www' // I'm using ../../build
 };
 
 var separateJsFiles = [

@@ -6,24 +6,25 @@ PROJECT_TYPES = {
         'language' : 'html/css',
         'method' : 'static_type',
     },
-    #2 : {
-    #    'title' : u'Статический с PHP',
-    #    'language' : 'html/css',
-    #},
+    2 : {
+        'title' : u'Статический с PHP',
+        'language' : 'html/css',
+        'method' : 'static_with_php_type',
+    },
     #3 : {
     #    'title' : u'Сайт на Joomla',
     #    'language' : 'php',
     #},
     #4 : {
-    #    'title' : u'На Django 1.11',
+    #    'title' : u'Чистый Django 1.11',
     #    'language' : 'python',
     #},
     #5 : {
-    #    'title' : u'На Django 1.11 и React',
+    #    'title' : u'Django 1.11 и Grappelli',
     #    'language' : 'python',
     #},
     #6 : {
-    #    'title' : u'На Mezzanine',
+    #    'title' : u'Сайт на Mezzanine',
     #    'language' : 'python',
     #},
 }
