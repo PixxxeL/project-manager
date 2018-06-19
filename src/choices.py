@@ -92,3 +92,8 @@ REACT_NPM_PACKS = [
 REACT_BOWER_PACKS = [
     'font-awesome#4.7.0', 'html5-boilerplate', 'html5shiv', 'respond'
 ]
+
+REGULAR_NPM_PACKS = [
+    'gulp', 'gutil', 'gulp-sass', 'gulp-jade', 'gulp-coffee',
+    'gulp-shell', 'gulp-rename', 'gulp-sourcemaps'
+]

@@ -167,21 +167,29 @@ class Generator(object):
         else:
             print _(u'\nОшибка!\nНет метода для этого типа...')
 
-    def static_type(self, mode='static'):
-        src = os.path.join(self.tmpl_dir, mode)
+    def static_type(self, is_react=False, gulpfile=None):
+        src = os.path.join(self.tmpl_dir, 'react' if is_react else 'static')
         dst = os.path.join(self.repo_dir, 'client')
+        print src, os.path.isdir(src)
         copy_tree(src, dst)
+        if gulpfile:
+            shutil.copy(
+                os.path.join(self.tmpl_dir, gulpfile, 'gulpfile.js'),
+                os.path.join(self.repo_dir, 'client', 'gulpfile.js')
+            )
         os.chdir(dst)
         self.npm_init()
         self.bower_init()
-        npm = REACT_NPM_PACKS if mode == 'react' else STATIC_NPM_PACKS
-        bower = REACT_BOWER_PACKS if mode == 'react' else STATIC_BOWER_PACKS
+        npm = REACT_NPM_PACKS if is_react else STATIC_NPM_PACKS
+        if gulpfile == 'regular':
+            npm = REGULAR_NPM_PACKS
+        bower = REACT_BOWER_PACKS if is_react else STATIC_BOWER_PACKS
         self.call('npm i --save %s' % ' '.join(npm))
         self.call('bower i --save %s' % ' '.join(bower))
         self.call('gulp copy')
-        self.call('gulp build') if mode == 'react' else self.call('gulp compile')
+        self.call('gulp build') if is_react else self.call('gulp compile')
         os.chdir(self.pro_dir)
-        batched = ['gulp', 'webpack'] if mode == 'react' else ['gulp']
+        batched = ['gulp', 'webpack'] if is_react else ['gulp']
         self.add_batches(batched)
 
     def static_with_php_type(self):
@@ -215,8 +223,10 @@ class Generator(object):
         self.call('pip install -r requirements.txt')
         os.chdir(self.pro_dir)
         self.add_batches(['envi', 'mana', 'runs'])
-        client_type = 'react' if self.model['client_type'] == 1 else 'static'
-        self.static_type(client_type)
+        self.static_type(
+            is_react=(self.model['client_type'] == 1),
+            gulpfile='regular'
+        )
 
     def npm_init(self):
         data = {

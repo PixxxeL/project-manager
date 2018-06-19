@@ -113,7 +113,7 @@ gulp.task('compile', ['jade', 'sass', 'coffee']);
 /**
  * Development task
  */
-gulp.task('default', ['compile', 'py-server', 'watch', 'browse']);
+gulp.task('default', ['compile', 'py-server', 'watch']);
 
 
 /**
