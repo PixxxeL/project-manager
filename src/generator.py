@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import commands
 from distutils.dir_util import copy_tree
 import json
 import os
@@ -149,9 +150,14 @@ class Generator(object):
         os.chdir(self.pro_dir)
 
     def call(self, cmd, args=[]):
-        cmds = cmd.split(' ')
-        cmds.extend(args)
-        subprocess.call(cmds, shell=True)
+        if os.name == 'posix':
+            print commands.getoutput('%s %s' % (cmd, ' '.join(args),))
+        elif os.name == 'nt':
+            cmds = cmd.split(' ')
+            cmds.extend(args)
+            subprocess.call(cmds, shell=True)
+        else:
+            print _(u'Ошибка команды %s' % cmd)
 
     def create_paths(self):
         self.app_dir = os.path.dirname(os.path.abspath(__file__))
@@ -170,7 +176,6 @@ class Generator(object):
     def static_type(self, is_react=False, gulpfile=None):
         src = os.path.join(self.tmpl_dir, 'react' if is_react else 'static')
         dst = os.path.join(self.repo_dir, 'client')
-        print src, os.path.isdir(src)
         copy_tree(src, dst)
         if gulpfile:
             shutil.copy(
@@ -219,6 +224,7 @@ class Generator(object):
         dst = os.path.join(self.repo_dir, 'server')
         copy_tree(src, dst)
         self.call('virtualenv env')
+        #self.call('./env/bin/activate')
         os.chdir(dst)
         self.call('pip install -r requirements.txt')
         os.chdir(self.pro_dir)
