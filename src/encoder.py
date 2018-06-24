@@ -6,7 +6,7 @@ import sys
 class StringEncoder(object):
 
     def __init__(self):
-        self.coding = sys.stdout.encoding
+        self.coding = sys.stdout.encoding or 'utf-8'
         #if os.name == 'posix':
         #    self.coding = 'utf-8'
         #else:

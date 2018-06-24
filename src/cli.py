@@ -93,7 +93,7 @@ class Cli(object):
         )
 
     def ask_choices(self, start_text, choices):
-        print self.gen_choices(start_text, choices)
+        print _(self.gen_choices(start_text, choices))
         inp = None
         keys = map(str, choices.keys())
         while not inp:
