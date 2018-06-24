@@ -145,6 +145,8 @@ class Generator(object):
         os.chdir(self.pro_dir)
 
     def push(self):
+        if not self.model['repo']:
+            return
         os.chdir(self.repo_dir)
         self.call('git push origin master')
         os.chdir(self.pro_dir)
@@ -224,9 +226,14 @@ class Generator(object):
         dst = os.path.join(self.repo_dir, 'server')
         copy_tree(src, dst)
         self.call('virtualenv env')
-        #self.call('./env/bin/activate')
+        if os.name == 'posix':
+            env = '../../env/bin/activate'
+        elif os.name == 'nt':
+            env = '..\\..\\env\\Scripts\\activate.bat'
+        else:
+            print _(u'Ошибка команды %s' % cmd)
         os.chdir(dst)
-        self.call('pip install -r requirements.txt')
+        self.call('%s & pip install -r requirements.txt' % env)
         os.chdir(self.pro_dir)
         self.add_batches(['envi', 'mana', 'runs'])
         self.static_type(
