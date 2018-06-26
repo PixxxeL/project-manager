@@ -41,7 +41,7 @@ class Generator(object):
         print _(u'Создание директории проекта...')
         try:
             os.makedirs(self.pro_dir, self.dir_mode)
-        except WindowsError:
+        except Exception as e:
             print _(u'\nОшибка!\nДиректория %s уже существует...' % self.pro_dir)
             sys.exit(1)
         os.chdir(self.pro_dir)
@@ -186,14 +186,17 @@ class Generator(object):
                 os.path.join(self.repo_dir, 'client', 'gulpfile.js')
             )
         os.chdir(dst)
+        print _(u'Инициализация клиента...')
         self.npm_init()
         self.bower_init()
         npm = REACT_NPM_PACKS if is_react else STATIC_NPM_PACKS
         if gulpfile == 'regular':
             npm = REGULAR_NPM_PACKS
         bower = REACT_BOWER_PACKS if is_react else STATIC_BOWER_PACKS
+        print _(u'Установка зависимостей клиента...')
         self.call('npm i --save %s' % ' '.join(npm))
         self.call('bower i --save %s' % ' '.join(bower))
+        print _(u'Первоначальная сборка клиента...')
         self.call('gulp copy')
         self.call('gulp build') if is_react else self.call('gulp compile')
         os.chdir(self.pro_dir)
@@ -234,7 +237,7 @@ class Generator(object):
         # proc virtualenv
         self.call('virtualenv env')
         if os.name == 'posix':
-            env = '. ../../env/bin/activate'
+            env = 'source ../../env/bin/activate'
         elif os.name == 'nt':
             env = '..\\..\\env\\Scripts\\activate.bat'
         else:
@@ -258,6 +261,12 @@ class Generator(object):
             re.compile(r'%PROJECT_NAME%'),
             self.model['name']
         )
+        if os.name == 'posix':
+            self.find_and_replace(
+                local_settings,
+                re.compile(r'\\\\'),
+                '/'
+            )
         # migrate
         os.chdir(dst)
         self.call('%s & python manage.py migrate' % env)
