@@ -4,6 +4,7 @@ import commands
 from distutils.dir_util import copy_tree
 import json
 import os
+import random
 import re
 import subprocess
 import shutil
@@ -221,10 +222,16 @@ class Generator(object):
 
     def pure_django_type(self):
         os.chdir(self.pro_dir)
-        os.mkdir('media', self.dir_mode)
+        # media dir
+        try:
+            os.mkdir('media', self.dir_mode)
+        except:
+            pass
+        # copy template
         src = os.path.join(self.tmpl_dir, 'django')
         dst = os.path.join(self.repo_dir, 'server')
         copy_tree(src, dst)
+        # proc virtualenv
         self.call('virtualenv env')
         if os.name == 'posix':
             env = '. ../../env/bin/activate'
@@ -234,8 +241,30 @@ class Generator(object):
             print _(u'Ошибка команды %s' % cmd)
         os.chdir(dst)
         self.call('%s & pip install -r requirements.txt' % env)
+        # replaces
+        local_settings = os.path.join(dst, 'core', 'local_settings.py')
+        self.find_and_replace(
+            local_settings,
+            re.compile(r'%SECRET_KEY%'),
+            self.get_random_string()
+        )
+        self.find_and_replace(
+            local_settings,
+            re.compile(r'%ROOT_PATH%'),
+            self.pro_dir.replace('\\', r'\\\\')
+        )
+        self.find_and_replace(
+            local_settings,
+            re.compile(r'%PROJECT_NAME%'),
+            self.model['name']
+        )
+        # migrate
+        os.chdir(dst)
+        self.call('%s & python manage.py migrate' % env)
         os.chdir(self.pro_dir)
+        # batch files
         self.add_batches(['envi', 'mana', 'runs'])
+        # client
         if self.model['client_type']:
             self.static_type(
                 is_react=(self.model['client_type'] == 2),
@@ -302,6 +331,12 @@ class Generator(object):
         data = open(filepath, 'rb').read()
         data = target_re.sub(string, data)
         open(filepath, 'wb').write(data)
+
+    def get_random_string(self):
+        chars = 'abcdefghijklmnopqrstuvwxyz'\
+            'ABCDEFGHIJKLMNOPQRSTUVWXYZ'\
+            '0123456789!@#$%^&*(-_=+)'
+        return ''.join(random.choice(chars) for i in range(50))
 
     def dev_generate(self):
         self.route_type()

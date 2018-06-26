@@ -1,6 +1,6 @@
 DEBUG = True
 
-SECRET_KEY = 'type many symbols here'
+SECRET_KEY = '%SECRET_KEY%'
 
 ALLOWED_HOSTS = [
     '*'
@@ -8,13 +8,13 @@ ALLOWED_HOSTS = [
 
 INTERNAL_IPS = ['127.0.0.1']
 
-_ROOT_PATH = 'path\\where\\project\\live'
+_ROOT_PATH = '%ROOT_PATH%'
 
 # https://docs.djangoproject.com/en/1.11/ref/settings/#databases
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': '%s\\core.db' % _ROOT_PATH,
+        'NAME': '%s\\%PROJECT_NAME%.db' % _ROOT_PATH,
     }
 }
 
