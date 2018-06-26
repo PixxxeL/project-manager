@@ -41,9 +41,12 @@ PROJECT_TYPES = {
 
 PROJECT_CLIENT_TYPES = {
     0 : {
-        'title' : u'Стандартный',
+        'title' : u'Без клиента',
     },
     1 : {
+        'title' : u'Стандартный',
+    },
+    2 : {
         'title' : u'React',
     },
 }

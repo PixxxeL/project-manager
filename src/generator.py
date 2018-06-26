@@ -227,7 +227,7 @@ class Generator(object):
         copy_tree(src, dst)
         self.call('virtualenv env')
         if os.name == 'posix':
-            env = '../../env/bin/activate'
+            env = '. ../../env/bin/activate'
         elif os.name == 'nt':
             env = '..\\..\\env\\Scripts\\activate.bat'
         else:
@@ -236,10 +236,11 @@ class Generator(object):
         self.call('%s & pip install -r requirements.txt' % env)
         os.chdir(self.pro_dir)
         self.add_batches(['envi', 'mana', 'runs'])
-        self.static_type(
-            is_react=(self.model['client_type'] == 1),
-            gulpfile='regular'
-        )
+        if self.model['client_type']:
+            self.static_type(
+                is_react=(self.model['client_type'] == 2),
+                gulpfile='regular'
+            )
 
     def npm_init(self):
         data = {
