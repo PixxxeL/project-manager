@@ -56,11 +56,11 @@ PROJECT_REPOS = {
         'title' : u'Без создания репозитория',
     },
     1 : {
-        'title' : u'Репозиторий на Bitbucket',
+        'title' : u'Приватный репозиторий на Bitbucket',
     },
-    #2 : {
-    #    'title' : u'Репозиторий на Github',
-    #},
+    2 : {
+        'title' : u'Публичный репозиторий на Github',
+    },
 }
 
 PROJECT_IDES = {
@@ -89,7 +89,10 @@ REACT_NPM_PACKS = [
     'babel-preset-react', 'css-loader', 'json-loader', 'react', 'react-dom', 
     'style-loader', 'webpack@3.8.1', 'axios', 'universal-cookie', 'react-popup',
     'moment'
-    #react-select react-flatpickr react-avatar-editor
+]
+
+ADDIT_REACT_PACKS = [ # not used yet
+    'react-select', 'react-flatpickr', 'react-avatar-editor', 'react-paginate'
 ]
 
 REACT_BOWER_PACKS = [

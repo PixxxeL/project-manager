@@ -109,7 +109,7 @@ class Cli(object):
         return text
 
     def dev_run(self):
-        self.get_project_type()
+        #self.get_project_type()
         self.get_repo_password()
         Generator(self.model).dev_generate()
 

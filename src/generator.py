@@ -60,7 +60,12 @@ class Generator(object):
         print _(u'Создание удаленного репозитория...')
         if self.model['repo'] == 1:
             self.create_bitbucket_repo()
+            #remote_url = 'https://%(user)s@bitbucket.org/%(user)s/%(name)s.git' % self.model
             remote_url = 'git@bitbucket.org:%(user)s/%(name)s.git' % self.model
+        if self.model['repo'] == 2:
+            self.create_github_repo()
+            #remote_url = 'git@github.com:%(user)s/%(name)s.git' % self.model
+            remote_url = 'https://github.com/%(user)s/%(name)s.git' % self.model
         self.call('git remote add origin %s' % remote_url)
 
     def create_bitbucket_repo(self):
@@ -81,6 +86,34 @@ class Generator(object):
             'headers' : {
                 'User-Agent': 'New Project Generator',
                 'Content-Type': 'application/json',
+            },
+            'auth' : (self.model['user'], self.model['password'],)
+        }
+        error = _(u'\nОшибка!\nНевозможно создать удаленный репозиторий...')
+        try:
+            response = requests.post(url, data=json.dumps(data), **conf)
+        except:
+            print error
+            return
+        if response.json().get('type') == 'error':
+            print error
+            print response.content
+
+    def create_github_repo(self):
+        url = 'https://api.github.com/user/repos'
+        data = {
+            'name': self.model['name'],
+            'private': False,
+            'has_issues': False,
+            'has_projects': False,
+            'has_wiki': False,
+            #'homepage': '',
+            #'description': '',
+        }
+        conf = {
+            'timeout' : 15,
+            'headers' : {
+                'User-Agent': 'New Project Generator',
             },
             'auth' : (self.model['user'], self.model['password'],)
         }
@@ -348,4 +381,4 @@ class Generator(object):
         return ''.join(random.choice(chars) for i in range(50))
 
     def dev_generate(self):
-        self.route_type()
+        self.create_remote_repo()
