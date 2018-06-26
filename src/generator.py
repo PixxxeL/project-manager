@@ -237,13 +237,13 @@ class Generator(object):
         # proc virtualenv
         self.call('virtualenv env')
         if os.name == 'posix':
-            env = 'source ../../env/bin/activate'
+            env = '. ../../env/bin/activate &&'
         elif os.name == 'nt':
-            env = '..\\..\\env\\Scripts\\activate.bat'
+            env = '..\\..\\env\\Scripts\\activate.bat &'
         else:
             print _(u'Ошибка команды %s' % cmd)
         os.chdir(dst)
-        self.call('%s & pip install -r requirements.txt' % env)
+        self.call('%s pip install -r requirements.txt' % env)
         # replaces
         local_settings = os.path.join(dst, 'core', 'local_settings.py')
         self.find_and_replace(
@@ -269,7 +269,7 @@ class Generator(object):
             )
         # migrate
         os.chdir(dst)
-        self.call('%s & python manage.py migrate' % env)
+        self.call('%s python manage.py migrate' % env)
         os.chdir(self.pro_dir)
         # batch files
         self.add_batches(['envi', 'mana', 'runs'])
