@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
 
+import json
 import getpass
+from optparse import OptionParser
+import os
 import re
 
 from choices import *
@@ -10,11 +13,20 @@ from encoder import _
 
 class Cli(object):
 
+    commands = ['start', 'pull', 'deploy', 'publish', 'extend']
+    config_fields = ['path', 'user']
+
     def __init__(self):
+        self.commandline_parse()
         self.pro_re = re.compile(r'[^0-9a-z\-]+')
-        self.model = _new_model()
+        self.model = self.get_default_model()
+        self.load_config()
 
     def run(self):
+        getattr(self, self.command)()
+        self.save_config()
+
+    def start(self):
         self.get_project_path()
         self.get_project_name()
         self.get_project_title()
@@ -23,7 +35,21 @@ class Cli(object):
         self.get_project_ide()
         Generator(self.model).generate()
 
+    def pull(self):
+        raise NotImplementedError('Method not ready yet!')
+
+    def deploy(self):
+        raise NotImplementedError('Method not ready yet!')
+
+    def publish(self):
+        raise NotImplementedError('Method not ready yet!')
+
+    def extend(self):
+        raise NotImplementedError('Method not ready yet!')
+
     def get_project_path(self):
+        if self.model['path']:
+            return
         ask = _(u'\nПуть до места, где будет папка проекта: ')
         inp = raw_input(ask)
         self.model['path'] = inp.strip() or '.'
@@ -65,7 +91,7 @@ class Cli(object):
         self.get_repo_password()
 
     def get_repo_user(self):
-        if not self.model['repo']:
+        if not self.model['repo'] or self.model['user']:
             return
         ask = _(u'\nЛогин на удаленном репозитории: ')
         inp = None
@@ -108,21 +134,51 @@ class Cli(object):
             text = u'%s  %d) %s\n' % (text, k, v['title'],)
         return text
 
-    def dev_run(self):
-        #self.get_project_type()
-        self.get_repo_password()
-        Generator(self.model).dev_generate()
+    def commandline_parse(self):
+        '''
+        Должен вызываться первым
+        '''
+        parser = OptionParser(usage='%s [options]' % '|'.join(self.commands))
+        parser.add_option(
+            '-c', '--config-file', action="store", dest='config_file',
+            default='config.json', help='Path to config file'
+        )
+        (options, args) = parser.parse_args()
+        self.command = args[0] if args and args[0] in self.commands else 'start'
+        self.config_file = options.config_file
 
+    def load_config(self):
+        '''
+        Должен вызываться после `self.model = self.get_default_model()`
+        '''
+        if self.config_file == 'config.json':
+            cur_dir = os.path.dirname(os.path.abspath(__file__))
+            self.config_file = os.path.join(cur_dir, self.config_file)
+        try:
+            config = json.load(open(self.config_file, 'rb')) or {}
+        except:
+            config = {}
+        for field in self.config_fields:
+            self.model[field] = config.get(field, self.model[field])
 
-def _new_model():
-    return {
-        'path' : 'C:\\Users\\pix\\dev\\pro',
-        'name' : 'test-django-project',
-        'title' : u'Тестовый проект',
-        'type' : 4,
-        'repo' : 0,
-        'ide' : 0,
-        'user' : 'pixxxel',
-        'password' : '',
-        'client_type' : 0,
-    }
+    def save_config(self):
+        '''
+        Предпочтительно вызывать в конце
+        '''
+        config = {}
+        for field in self.config_fields:
+            config[field] = self.model[field]
+        json.dump(config, open(self.config_file, 'wb'))
+
+    def get_default_model(self):
+        return {
+            'path' : '',
+            'name' : 'test-django-project',
+            'title' : u'Тестовый проект',
+            'type' : 4,
+            'repo' : 0,
+            'ide' : 0,
+            'user' : '',
+            'password' : '',
+            'client_type' : 0,
+        }

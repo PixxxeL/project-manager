@@ -62,7 +62,7 @@ class Generator(object):
             self.create_bitbucket_repo()
             #remote_url = 'https://%(user)s@bitbucket.org/%(user)s/%(name)s.git' % self.model
             remote_url = 'git@bitbucket.org:%(user)s/%(name)s.git' % self.model
-        if self.model['repo'] == 2:
+        elif self.model['repo'] == 2:
             self.create_github_repo()
             #remote_url = 'git@github.com:%(user)s/%(name)s.git' % self.model
             remote_url = 'https://github.com/%(user)s/%(name)s.git' % self.model
@@ -362,11 +362,16 @@ class Generator(object):
     def repo_site_url(self):
         if self.model['repo'] == 1:
             return 'https://bitbucket.org/%(user)s/%(name)s' % self.model
+        elif self.model['repo'] == 2:
+            return 'https://github.com/%(user)s/%(name)s' % self.model
         return ''
 
     def repo_git_url(self):
         if self.model['repo'] == 1:
             return 'git+ssh://git@bitbucket.org/%(user)s/%(name)s.git' % self.model
+        elif self.model['repo'] == 2:
+            # проверить!
+            return 'git@github.com:%(user)s/%(name)s.git' % self.model
         return ''
 
     def find_and_replace(self, filepath, target_re, string):
