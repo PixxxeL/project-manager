@@ -5,6 +5,7 @@ import getpass
 from optparse import OptionParser
 import os
 import re
+import sys
 
 from choices import *
 from generator import Generator
@@ -64,7 +65,7 @@ class Cli(object):
         self.model['name'] = inp
 
     def get_project_title(self):
-        ask = _(u'\nНазвание проекта (на русском): ')
+        ask = _(u'\nНазвание проекта (можно на русском): ')
         inp = None
         while not inp:
             inp = raw_input(ask)
@@ -141,7 +142,7 @@ class Cli(object):
         parser = OptionParser(usage='%s [options]' % '|'.join(self.commands))
         parser.add_option(
             '-c', '--config-file', action="store", dest='config_file',
-            default='config.json', help='Path to config file'
+            default='config.json', help='Full path to config file'
         )
         (options, args) = parser.parse_args()
         self.command = args[0] if args and args[0] in self.commands else 'start'
@@ -151,11 +152,17 @@ class Cli(object):
         '''
         Должен вызываться после `self.model = self.get_default_model()`
         '''
-        if self.config_file == 'config.json':
+        if getattr(sys, 'frozen', False):
+            cur_dir = os.path.dirname(sys.executable)
+        elif __file__:
             cur_dir = os.path.dirname(os.path.abspath(__file__))
+        else:
+            cur_dir = os.getcwd()
+        if self.config_file == 'config.json':
             self.config_file = os.path.join(cur_dir, self.config_file)
         try:
             config = json.load(open(self.config_file, 'rb')) or {}
+            print _(u'Конфигурация загружена из файла: %s' % self.config_file)
         except:
             config = {}
         for field in self.config_fields:
@@ -169,6 +176,7 @@ class Cli(object):
         for field in self.config_fields:
             config[field] = self.model[field]
         json.dump(config, open(self.config_file, 'wb'))
+        print _(u'Конфигурация записана в файл: %s' % self.config_file)
 
     def get_default_model(self):
         return {
