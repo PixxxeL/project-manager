@@ -1,0 +1,31 @@
+{% extends "pages/page.html" %}
+
+{% load mezzanine_tags artdent_tags %}
+
+{% block main %}
+{{ block.super }}
+<div class="container">
+    <div class="wrapper">
+        <div class="page-title">
+            {% editable page.title %}<h1>{{ page.title }}</h1>{% endeditable %}
+        </div>
+
+        <div class="items">
+            {% for item in blog_posts.object_list %}
+            <div class="item">
+                <a href="{{ item.get_absolute_url }}" class="title">{{ item.title }}</a>
+                <div class="intro">{{ item.description_from_content|striptags }}</div>
+                <div class="date">{{ item.publish_date|date:"d E Y" }}</div>
+            </div>
+            {% empty %}
+            <div class="empty-message">Пока нет новостей</div>
+            {% endfor %}
+        </div>
+
+        {% pagination_for blog_posts %}
+
+    </div>
+</div>
+{% endblock %}
+
+{% block body_class %}page news{% endblock %}

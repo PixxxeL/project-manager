@@ -1,17 +1,17 @@
 var gulp       = require('gulp'),
     gutil      = require('gutil'),
     sass       = require('gulp-sass'),
-    jade       = require('gulp-jade'),
     coffee     = require('gulp-coffee'),
     rename     = require('gulp-rename'),
     sourcemaps = require('gulp-sourcemaps'),
+    compress   = require('gulp-yuicompressor'),
+    concat     = require('gulp-concat-sourcemap'),
     shell      = require('gulp-shell');
 
 var DEBUG  = true;
 
 var paths = {
     'sass'   : './sass/**/*.sass',
-    'jade'   : './jade/**/*.jade',
     'coffee' : './coffee/**/*.coffee'
 };
 
@@ -31,6 +31,7 @@ var concatenatedJsFiles = [
  * Add css files here for compress and concatenate
  */
 var concatenatedCssFiles = [
+    'css/font-awesome.min.css',
     'css/normalize.css',
     'css/main.css'
 ];
@@ -56,6 +57,14 @@ gulp.task('sass', function () {
     pipe.pipe(gulp.dest('css'));
 });
 
+gulp.task('css-concat', function () {
+    gulp.src(concatenatedCssFiles)
+        .pipe(concat('styles.min.css', {
+            sourcesContent : DEBUG
+        }))
+        .pipe(gulp.dest('css'));
+});
+
 gulp.task('coffee', function () {
     var pipe = gulp.src(paths.coffee);
     if (DEBUG) {
@@ -70,27 +79,20 @@ gulp.task('coffee', function () {
     pipe.pipe(gulp.dest('js'));
 });
 
-gulp.task('jade', function () {
-    var pipe = gulp.src(paths.jade);
-    if (DEBUG) {
-        pipe = pipe.pipe(sourcemaps.init());
-    }
-    pipe = pipe.pipe(jade({
-        pretty: true
-    })).on('error', errHandler);
-    if (DEBUG) {
-        pipe = pipe.pipe(sourcemaps.write());
-    }
-    pipe.pipe(gulp.dest('html'));
+gulp.task('js-concat', function () {
+    gulp.src(concatenatedJsFiles)
+        .pipe(concat('app.min.js', {
+            sourcesContent : DEBUG
+        }))
+        .pipe(gulp.dest('js'));
 });
 
 gulp.task('watch', function () {
-    gulp.watch(paths.jade, ['jade']);
-    gulp.watch(paths.sass, ['sass']);
-    gulp.watch(paths.coffee, ['coffee']);
+    gulp.watch(paths.sass, ['sass', 'css-concat']);
+    gulp.watch(paths.coffee, ['coffee', 'js-concat']);
 });
 
-gulp.task('compile', ['jade', 'sass', 'coffee']);
+gulp.task('compile', ['sass', 'coffee']);
 
 /**
  * Development task
@@ -121,6 +123,20 @@ gulp.task('copy', function () {
 });
 
 /**
+ * Minify for build
+ */
+gulp.task('static-minify', function () {
+    console.log('\n\tBuild static files...');
+    console.log('\tDEBUG is:', DEBUG, '\n');
+    gulp.src('css/styles.min.css')
+        .pipe(compress({ type: 'css' }))
+        .pipe(gulp.dest('css'));
+    gulp.src('js/app.min.js')
+        .pipe(compress({ type: 'js' }))
+        .pipe(gulp.dest('js'));
+});
+
+/**
  * Set DEBUG to false for build
  */
 gulp.task('undebug', function () {
@@ -130,11 +146,12 @@ gulp.task('undebug', function () {
 /**
  * Subtasks for build
  */
-gulp.task('pro-compile', ['undebug', 'compile']);
+gulp.task('pro-compile', ['undebug', 'compile', 'js-concat', 'css-concat']);
+gulp.task('pro-build', ['undebug', 'static-minify']);
 
 /**
  * Build task
  */
 gulp.task('build', shell.task([
-    'gulp copy && gulp pro-compile'
+    'gulp copy && gulp pro-compile && gulp pro-build'
 ]));

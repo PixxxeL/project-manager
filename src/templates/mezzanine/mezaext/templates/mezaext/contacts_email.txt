@@ -1,0 +1,3 @@
+Пользователь {{ form.cleaned_data.name }}
+с номером телефона {{ form.cleaned_data.phone }}
+хочет записаться на прием{% if form.cleaned_data.stock %} по акции {{ form.cleaned_data.stock }}{% endif %}.

@@ -31,12 +31,12 @@ PROJECT_TYPES = {
     #    'method' : '',
     #    'readmes' : [''],
     #},
-    #6 : {
-    #    'title' : u'Mezzanine',
-    #    'language' : 'python',
-    #    'method' : '',
-    #    'readmes' : [''],
-    #},
+    6 : {
+        'title' : u'Mezzanine',
+        'language' : 'python',
+        'method' : 'mezzanine_type',
+        'readmes' : ['pure-django'],
+    },
 }
 
 PROJECT_CLIENT_TYPES = {
@@ -73,7 +73,7 @@ PROJECT_IDES = {
 }
 
 STATIC_NPM_PACKS = [
-    'gulp', 'gutil', 'del', 'gulp-sass', 'gulp-jade', 'gulp-coffee',
+    'gulp', 'gutil', 'del', 'gulp-sass', 'gulp-jade', 'gulp-coffee@2.3.5',
     'gulp-shell', 'gulp-rename', 'gulp-sourcemaps', 'gulp-yuicompressor',
     'gulp-concat', 'gulp-zip', 'gulp-html-replace'
 ]
@@ -100,6 +100,7 @@ REACT_BOWER_PACKS = [
 ]
 
 REGULAR_NPM_PACKS = [
-    'gulp', 'gutil', 'gulp-sass', 'gulp-jade', 'gulp-coffee',
-    'gulp-shell', 'gulp-rename', 'gulp-sourcemaps'
+    'gulp', 'gutil', 'gulp-sass', 'gulp-coffee@2.3.5', 'gulp-rename',
+    'gulp-sourcemaps', 'gulp-yuicompressor', 'gulp-concat-sourcemap',
+    'gulp-shell'
 ]

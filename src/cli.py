@@ -77,7 +77,7 @@ class Cli(object):
             u'\nТип проекта:',
             PROJECT_TYPES
         )
-        if self.model['type'] in [4]:
+        if self.model['type'] in [4, 6]:
             self.model['client_type'] = self.ask_choices(
                 u'\nТип клиентской части проекта:',
                 PROJECT_CLIENT_TYPES

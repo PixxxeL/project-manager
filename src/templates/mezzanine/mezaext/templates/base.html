@@ -1,0 +1,69 @@
+{% load pages_tags mezzanine_tags staticfiles %}<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+    <head prefix="og: http://opengraphprotocol.org/schema#">
+        <!-- End Google Tag Manager -->
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width,initial-scale=1">
+
+        <title>{% block meta_title %}{% endblock %}</title>
+        <meta name="keywords" content="{% block meta_keywords %}{% endblock %}">
+        <meta name="description" content="{% block meta_description %}{% endblock %}">
+        <meta name="robots" content="noyaka">
+
+        <meta property="og:url" content="{{ request.build_absolute_uri }}">
+        <meta property="og:title" content="{% block meta_og_title %}{% endblock %}">
+        <meta property="og:description" content="{% block meta_og_description %}{% endblock %}">
+        <!--meta property="og:image" content="//{{ request.get_host }}{% block meta_image %}/static/img/big-logo-footer.png{% endblock %}"-->
+
+        {% ifinstalled mezzanine.blog %}
+        <link rel="alternate" type="application/rss+xml" title="RSS" href="{% url 'blog_post_feed' 'rss' %}">
+        <link rel="alternate" type="application/atom+xml" title="Atom" href="{% url 'blog_post_feed' 'atom' %}">
+        {% endifinstalled %}
+
+        <link rel="apple-touch-icon" href="{% static 'img/favicon.png' %}">
+        <link rel="icon" href="{% static 'img/favicon.ico' %}">
+
+        {% compress css %}
+        <link rel="stylesheet" href="{% static 'css/styles.min.css' %}">
+        {% block extra_css %}{% endblock %}
+        {% endcompress %}
+
+        <!--[if lt IE 9]>
+        <script src="{% static "js/html5shiv.min.js" %}"></script>
+        <script src="{% static "js/respond.min.js" %}"></script>
+        <![endif]-->{% block extra_head %}{% endblock %}
+
+    </head>
+
+    <body class="{% block body_class %}{% endblock %}">
+        <!--[if lt IE 9]>
+        <p class="browserupgrade">
+            Вы используете <strong>очень старый</strong> браузер.
+            Пожалуйста, <a href="http://browsehappy.com/">обновите Ваш браузер</a>
+            для улучшенного отображения сайта.
+        </p>
+        <![endif]-->
+
+        <div id="container">
+
+            {% block header %}{% include 'includes/_header.html' %}{% endblock %}
+
+            <main>{% block main %}{% endblock %}</main>
+
+            {% block footer %}{% include 'includes/_footer.html' %}{% endblock %}
+
+        </div>
+
+        {% include 'includes/_modals.html' %}
+
+        {% compress js %}{% block footer_js %}
+        <script src="{% static 'js/jquery-2.2.4.min.js' %}"></script>
+        <!--[if lt IE 9]><script src="{% static 'js/jquery-1.12.4.min.js' %}"></script><![endif]-->
+        {% include "includes/footer_scripts.html" %}
+        <script src="{% static 'js/app.min.js' %}"></script>
+        {% endblock %}{% endcompress %}
+
+        {% if not debug %}{# Insert GA, YM here. Dont forget define INTERNAL_IPS #}{% endif %}
+    </body>
+</html>

@@ -1,0 +1,38 @@
+{% if current_page.has_previous or current_page.has_next %}
+
+<div class="pagination">
+    <ul>
+        {% if current_page.has_previous %}
+        <li>
+            <a href="{{ current_path }}{% if querystring %}?{{ querystring }}{% endif %}" class="prev">
+                <i class="fa fa-angle-double-left"></i>
+            </a>
+        </li>
+        {% endif %}
+        
+        {% for page in current_page.visible_page_range %}
+        <li>
+            {% if page == current_page.number %}
+            <span class="page active">{{ page }}</span>
+            {% elif page == 1 %}
+            <a href="{{ current_path }}{% if querystring %}?{{ querystring }}{% endif %}" class="page">{{ page }}</a>
+            {% else %}
+            <a href="?page={{ page }}{% if querystring %}&{{ querystring }}{% endif %}" class="page">{{ page }}</a>
+            {% endif %}
+        </li>
+        {% endfor %}
+
+        {% if current_page.has_next %}
+        <li>
+            <a href="?page={{ current_page.paginator.num_pages }}{% if querystring %}&{{ querystring }}{% endif %}" class="next">
+                <i class="fa fa-angle-double-right"></i>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
+
+{% endif %}
+
+
+

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block meta_og_title %}{% block meta_title %}{% trans 'Страница не найдена' %}{% endblock %}{% endblock %}
+
+{% block main %}
+<div class="container">
+    <div class="wrapper">
+        <div class="page-title">
+            <h1>{% trans '404. Страница не найдена' %}</h1>
+        </div>
+        <div class="page-body">
+            <p>{% trans 'На этом сайте нет такой страницы. Воспользуйтесь поиском или поищите с <a href="/">главной</a>.' %}</p>
+        </div>
+    </div>
+</div>
+{% endblock %}
