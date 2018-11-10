@@ -2,8 +2,11 @@
 
 import json
 
+from django.core.cache import cache
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import HttpResponse
+
+from mezaext.models import EditableBlock
 
 
 def paginator(objects_list, page, per_page=10, to_show=10):
@@ -38,3 +41,15 @@ def get_client_ip(request):
 
 def json_response(data):
     return HttpResponse(json.dumps(data), content_type='application/json')
+
+
+def get_editable_block(slug):
+    key = 'editableblock:%s' % slug
+    text = cache.get(key, '')
+    if not text:
+        try:
+            text = EditableBlock.objects.get(slug=slug, enabled=True).text
+            cache.set(key, text, 60 * 5)
+        except EditableBlock.DoesNotExist:
+            return ''
+    return text
