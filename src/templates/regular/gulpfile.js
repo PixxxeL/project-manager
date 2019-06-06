@@ -8,7 +8,8 @@ var gulp       = require('gulp'),
     concat     = require('gulp-concat-sourcemap'),
     shell      = require('gulp-shell');
 
-var DEBUG  = true;
+var DEBUG  = true,
+    TASK_DELAY = 200;
 
 var paths = {
     'sass'   : './sass/**/*.sass',
@@ -58,11 +59,13 @@ gulp.task('sass', function () {
 });
 
 gulp.task('css-concat', function () {
-    gulp.src(concatenatedCssFiles)
-        .pipe(concat('styles.min.css', {
-            sourcesContent : DEBUG
-        }))
-        .pipe(gulp.dest('css'));
+    setTimeout(function () {
+        gulp.src(concatenatedCssFiles)
+            .pipe(concat('styles.min.css', {
+                sourcesContent : DEBUG
+            }))
+            .pipe(gulp.dest('css'));
+    }, TASK_DELAY);
 });
 
 gulp.task('coffee', function () {
@@ -80,11 +83,13 @@ gulp.task('coffee', function () {
 });
 
 gulp.task('js-concat', function () {
-    gulp.src(concatenatedJsFiles)
-        .pipe(concat('app.min.js', {
-            sourcesContent : DEBUG
-        }))
-        .pipe(gulp.dest('js'));
+    setTimeout(function () {
+        gulp.src(concatenatedJsFiles)
+            .pipe(concat('app.min.js', {
+                sourcesContent : DEBUG
+            }))
+            .pipe(gulp.dest('js'));
+    }, TASK_DELAY);
 });
 
 gulp.task('watch', function () {
