@@ -66,6 +66,12 @@ class Generator(object):
             self.create_github_repo()
             #remote_url = 'git@github.com:%(user)s/%(name)s.git' % self.model
             remote_url = 'https://github.com/%(user)s/%(name)s.git' % self.model
+        elif self.model['repo'] == 3:
+            self.create_gitlab_repo()
+            remote_url = 'git@gitlab.42dev.ru:%s/%s.git' % (
+                GITLAB_NAMESPACES[self.model['gitlab_group']]['title'],
+                self.model['name'],
+            )
         self.call('git remote add origin %s' % remote_url)
 
     def create_bitbucket_repo(self):
@@ -126,6 +132,33 @@ class Generator(object):
         if response.json().get('type') == 'error':
             print error
             print response.content
+
+    def create_gitlab_repo(self):
+        url = 'http://gitlab.42dev.ru/api/v4/projects'
+        data = {
+            'name': self.model['title'],
+            'path': self.model['name'],
+            'namespace_id': self.model['gitlab_group'],
+            'visibility': 'private',
+            'issues_enabled': False,
+            'wiki_enabled': False,
+        }
+        conf = {
+            'timeout' : 15,
+            'headers' : {
+                'User-Agent': 'New Project Generator',
+                'Private-Token': self.model['gitlab_token'],
+            },
+        }
+        error = _(u'\nОшибка!\nНевозможно создать удаленный репозиторий...')
+        try:
+           response = requests.post(url, data=data, **conf)
+        except:
+           print error
+           return
+        if response.json().get('type') == 'error':
+           print error
+           print response.content
 
     def create_ide_pro(self):
         if not self.model['ide']:

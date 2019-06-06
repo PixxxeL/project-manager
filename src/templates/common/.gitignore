@@ -1,7 +1,6 @@
 /client/bower_components
 /client/node_modules
-*.pyc
-*.pyo
+*.py[cod]
 *.log
 *.sql
 *.sqlite3

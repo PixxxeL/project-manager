@@ -15,7 +15,7 @@ from encoder import _
 class Cli(object):
 
     commands = ['start', 'pull', 'deploy', 'publish', 'extend']
-    config_fields = ['path', 'user']
+    config_fields = ['path', 'user', 'gitlab_token']
 
     def __init__(self):
         self.commandline_parse()
@@ -88,8 +88,12 @@ class Cli(object):
             u'\nУдаленный репозиторий:',
             PROJECT_REPOS
         )
-        self.get_repo_user()
-        self.get_repo_password()
+        if self.model['repo'] in [1, 2]:
+            self.get_repo_user()
+            self.get_repo_password()
+        elif self.model['repo'] == 3:
+            self.get_gitlab_token()
+            self.get_repo_namespace()
 
     def get_repo_user(self):
         if not self.model['repo'] or self.model['user']:
@@ -112,6 +116,24 @@ class Cli(object):
             #inp = getpass.getpass(ask)
             inp = _(inp.strip())
         self.model['password'] = inp
+
+    def get_gitlab_token(self):
+        if not self.model['repo'] or self.model['gitlab_token']:
+            return
+        ask = _(u'\nPrivate token для GitLab: ')
+        inp = None
+        while not inp:
+            inp = raw_input(ask)
+            inp = _(inp.strip())
+        self.model['gitlab_token'] = inp
+
+    def get_repo_namespace(self):
+        if not self.model['repo']:
+            return
+        self.model['gitlab_group'] = self.ask_choices(
+           u'\nГруппа проекта:',
+           GITLAB_NAMESPACES
+        )
 
     def get_project_ide(self):
         self.model['ide'] = self.ask_choices(
@@ -188,5 +210,7 @@ class Cli(object):
             'ide' : 0,
             'user' : '',
             'password' : '',
+            'gitlab_group' : '',
+            'gitlab_token' : '',
             'client_type' : 0,
         }

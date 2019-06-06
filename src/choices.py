@@ -2,7 +2,7 @@
 
 PROJECT_TYPES = {
     1 : {
-        'title' : u'Статический полностью',
+        'title' : u'Статический (Jade, CoffeeScript, SASS)',
         'language' : 'html/css',
         'method' : 'static_type',
         'readmes' : ['static-client'],
@@ -61,6 +61,9 @@ PROJECT_REPOS = {
     2 : {
         'title' : u'Публичный репозиторий на Github',
     },
+    3 : {
+        'title' : u'Приватный репозиторий на GitLab.42dev.ru',
+    },
 }
 
 PROJECT_IDES = {
@@ -69,6 +72,33 @@ PROJECT_IDES = {
     },
     1 : {
         'title' : u'Проект в Sublime Text 3',
+    },
+}
+
+GITLAB_NAMESPACES = {
+    6 : {
+        'title' : 'livefeed',
+    },
+    7 : {
+        'title' : 'tools',
+    },
+    8 : {
+        'title' : 'gpn',
+    },
+    9 : {
+        'title' : 'sites',
+    },
+    10 : {
+        'title' : 'portals',
+    },
+    11 : {
+        'title' : 'services',
+    },
+    12 : {
+        'title' : 'misc',
+    },
+    14 : {
+        'title' : 'packages',
     },
 }
 
