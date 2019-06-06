@@ -242,6 +242,9 @@ class Generator(object):
         else:
             print _(u'\nОшибка!\nНет метода для этого типа...')
 
+    def empty_type(self):
+        pass
+
     def static_type(self, is_react=False, gulpfile=None):
         src = os.path.join(self.tmpl_dir, 'react' if is_react else 'static')
         dst = os.path.join(self.repo_dir, 'client')

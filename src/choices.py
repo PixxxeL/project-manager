@@ -1,6 +1,12 @@
 # -*- coding: utf-8 -*-
 
 PROJECT_TYPES = {
+    0 : {
+        'title' : u'Пустой проект',
+        'language' : 'html/css',
+        'method' : 'empty_type',
+        'readmes' : ['static-client'],
+    },
     1 : {
         'title' : u'Статический (Jade, CoffeeScript, SASS)',
         'language' : 'html/css',
