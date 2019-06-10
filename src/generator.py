@@ -414,6 +414,60 @@ class Generator(object):
             )
         self.common_django_type('mezzanine', prepare_server=middleware)
 
+    def grappelli_type(self):
+        def middleware():
+            app_dir_name = self.model['name'].replace('-', '')
+            server_dir = os.path.join(self.repo_dir, 'server')
+            filepath = os.path.join(server_dir, 'core', 'settings.py')
+            self.find_and_replace(
+                filepath,
+                re.compile(r'%APP_NAME%'),
+                app_dir_name
+            )
+            self.find_and_replace(
+                filepath,
+                re.compile(r'%PROJECT_TITLE%'),
+                self.model['title']
+            )
+            filepath = os.path.join(server_dir, 'core', 'urls.py')
+            self.find_and_replace(
+                filepath,
+                re.compile(r'%APP_NAME%'),
+                app_dir_name
+            )
+            os.rename(
+                os.path.join(server_dir, 'project_name'),
+                os.path.join(server_dir, app_dir_name)
+            )
+            filepath = os.path.join(server_dir, app_dir_name, '__init__.py')
+            self.find_and_replace(
+                filepath,
+                re.compile(r'%APP_NAME%'),
+                app_dir_name
+            )
+            self.find_and_replace(
+                filepath,
+                re.compile(r'%APP_NAME_TITLE%'),
+                app_dir_name.title()
+            )
+            filepath = os.path.join(server_dir, app_dir_name, 'app.py')
+            self.find_and_replace(
+                filepath,
+                re.compile(r'%APP_NAME%'),
+                app_dir_name
+            )
+            self.find_and_replace(
+                filepath,
+                re.compile(r'%APP_NAME_TITLE%'),
+                app_dir_name.title()
+            )
+            self.find_and_replace(
+                filepath,
+                re.compile(r'%PROJECT_TITLE%'),
+                self.model['title']
+            )
+        self.common_django_type('grappelli', prepare_server=middleware)
+
     def npm_init(self):
         data = {
             'name': self.model['name'],
@@ -465,6 +519,8 @@ class Generator(object):
             return 'https://bitbucket.org/%(user)s/%(name)s' % self.model
         elif self.model['repo'] == 2:
             return 'https://github.com/%(user)s/%(name)s' % self.model
+        elif self.model['repo'] == 3:
+            return 'http://gitlab.42dev.ru/%(gitlab_group)s/%(name)s' % self.model
         return ''
 
     def repo_git_url(self):
@@ -473,6 +529,8 @@ class Generator(object):
         elif self.model['repo'] == 2:
             # проверить!
             return 'git@github.com:%(user)s/%(name)s.git' % self.model
+        elif self.model['repo'] == 3:
+            return 'git@gitlab.42dev.ru:%(gitlab_group)s/%(name)s.git' % self.model
         return ''
 
     def find_and_replace(self, filepath, target_re, string):

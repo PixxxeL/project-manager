@@ -26,19 +26,19 @@ PROJECT_TYPES = {
     #    'readmes' : [''],
     #},
     4 : {
-        'title' : u'Чистый Django 1.11',
+        'title' : u'Чистый Django 1.11.21',
         'language' : 'python',
         'method' : 'pure_django_type',
         'readmes' : ['pure-django'],
     },
-    #5 : {
-    #    'title' : u'Grappelli',
-    #    'language' : 'python',
-    #    'method' : '',
-    #    'readmes' : [''],
-    #},
+    5 : {
+        'title' : u'Grappelli 2.12.3',
+        'language' : 'python',
+        'method' : 'grappelli_type',
+        'readmes' : ['pure-django'],
+    },
     6 : {
-        'title' : u'Mezzanine',
+        'title' : u'Mezzanine 4.3.1',
         'language' : 'python',
         'method' : 'mezzanine_type',
         'readmes' : ['pure-django'],
