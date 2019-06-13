@@ -6,7 +6,7 @@
 ## Использование
 
 Для использования требуется выбрать и загрузить
-[бинарник](https://github.com/PixxxeL/new-project/releases)
+[бинарник](https://github.com/PixxxeL/project-manager/releases)
 для Windows или Linux и запустить его
 
 ```shell
@@ -45,6 +45,11 @@ project-manager.win.exe --help
 ### Чистый Django 1.11
 
 Чистый Django 1.11 проект с клиентской частью обычной или react
+на выбор.
+
+### Grappelli 2.12.3
+
+Grappelli 2.12.3 проект с клиентской частью обычной или react
 на выбор.
 
 ### Mezzanine 4.3.1
