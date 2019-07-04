@@ -1,4 +1,4 @@
-Django==1.11.21
+Django==1.11.22
 django-grappelli==2.12.3
 django-filebrowser==3.11.1
 django-tinymce==2.8.0
